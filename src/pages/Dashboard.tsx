@@ -1,6 +1,8 @@
 import { Layout } from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, TrendingDown, DollarSign, AlertTriangle, Sparkles } from "lucide-react";
+import { ExpenseChart } from "@/components/ExpenseChart";
+import { SpendingTrendChart } from "@/components/SpendingTrendChart";
 
 export default function Dashboard() {
   const stats = [
@@ -113,16 +115,22 @@ export default function Dashboard() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="h-5 w-5 text-primary" />
-                Spending Chart
+                Spending by Category
               </CardTitle>
               <CardDescription>
                 Monthly expense breakdown
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="h-64 flex items-center justify-center bg-background rounded-lg border border-border">
-                <p className="text-muted-foreground">Chart visualization placeholder</p>
-              </div>
+              <ExpenseChart 
+                data={[
+                  { category: "Food", amount: 642 },
+                  { category: "Transport", amount: 245 },
+                  { category: "Entertainment", amount: 180 },
+                  { category: "Shopping", amount: 156 },
+                  { category: "Bills", amount: 1200 },
+                ]}
+              />
             </CardContent>
           </Card>
         </div>
