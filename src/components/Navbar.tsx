@@ -1,29 +1,31 @@
-import { Link, useLocation } from "react-router-dom";
-import { Menu, LayoutDashboard, Receipt, Lightbulb, Wallet, LogOut } from "lucide-react";
+import { Menu, Bell, LogOut } from "lucide-react";
 import { Button } from "./ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 interface NavbarProps {
   onMenuClick: () => void;
 }
 
 export const Navbar = ({ onMenuClick }: NavbarProps) => {
-  const location = useLocation();
-  const isAuth = location.pathname === "/auth";
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
-  if (isAuth) return null;
-
-  const navItems = [
-    { path: "/", label: "Dashboard", icon: LayoutDashboard },
-    { path: "/expenses", label: "Expenses", icon: Receipt },
-    { path: "/insights", label: "AI Insights", icon: Lightbulb },
-    { path: "/budget", label: "Budget", icon: Wallet },
-  ];
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out.",
+    });
+    navigate("/auth");
+  };
 
   return (
-    <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
+    <nav className="bg-card border-b border-border sticky top-0 z-50 backdrop-blur-sm bg-background/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <Button
               variant="ghost"
               size="icon"
@@ -32,42 +34,20 @@ export const Navbar = ({ onMenuClick }: NavbarProps) => {
             >
               <Menu className="h-5 w-5" />
             </Button>
-            
-            <Link to="/" className="flex items-center gap-2">
-              <div className="hexagon w-10 h-10 bg-primary flex items-center justify-center">
-                <span className="text-2xl">🐝</span>
-              </div>
-              <span className="font-bold text-xl hidden sm:block">Budget Bee</span>
-            </Link>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">🍯</span>
+              <h1 className="text-xl font-bold text-foreground">Budget Bee</h1>
+            </div>
           </div>
-
-          <div className="hidden lg:flex items-center gap-6">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = location.pathname === item.path;
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
-                    isActive
-                      ? "bg-primary text-primary-foreground font-medium"
-                      : "hover:bg-accent text-foreground"
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                  <span>{item.label}</span>
-                </Link>
-              );
-            })}
-          </div>
-
-          <Link to="/auth">
-            <Button variant="ghost" size="sm" className="gap-2">
-              <LogOut className="h-4 w-4" />
-              <span className="hidden sm:inline">Logout</span>
+          
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon">
+              <Bell className="h-5 w-5" />
             </Button>
-          </Link>
+            <Button variant="ghost" size="icon" onClick={handleLogout}>
+              <LogOut className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </div>
     </nav>

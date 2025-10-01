@@ -1,36 +1,119 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, TrendingDown, DollarSign, AlertTriangle, Sparkles } from "lucide-react";
 import { ExpenseChart } from "@/components/ExpenseChart";
 import { SpendingTrendChart } from "@/components/SpendingTrendChart";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(true);
+  const [insights, setInsights] = useState<string[]>([]);
+  const [expenses, setExpenses] = useState<any[]>([]);
+  const [budgets, setBudgets] = useState<any[]>([]);
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session) {
+        navigate("/auth");
+      }
+    });
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        navigate("/auth");
+      } else {
+        loadData();
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
+  const loadData = async () => {
+    const { data: expensesData } = await supabase
+      .from('expenses')
+      .select('*')
+      .order('date', { ascending: false });
+
+    const { data: budgetsData } = await supabase
+      .from('budgets')
+      .select('*');
+
+    setExpenses(expensesData || []);
+    setBudgets(budgetsData || []);
+    setLoading(false);
+  };
+
+  const generateInsights = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-insights');
+      
+      if (error) throw error;
+      
+      if (data?.insights) {
+        const insightsList = data.insights.split('\n').filter((line: string) => line.trim());
+        setInsights(insightsList);
+        toast({
+          title: "Insights generated!",
+          description: "Your personalized financial insights are ready.",
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to generate insights",
+        variant: "destructive",
+      });
+    }
+    setLoading(false);
+  };
+
+  const totalExpenses = expenses.reduce((sum, exp) => sum + parseFloat(exp.amount || 0), 0);
+  const totalBudget = budgets.reduce((sum, bud) => sum + parseFloat(bud.limit_amount || 0), 0);
+
+  const expensesByCategory = expenses.reduce((acc: any, exp) => {
+    acc[exp.category] = (acc[exp.category] || 0) + parseFloat(exp.amount || 0);
+    return acc;
+  }, {});
+
+  const chartData = Object.entries(expensesByCategory).map(([category, amount]) => ({
+    category,
+    amount: amount as number,
+  }));
+
   const stats = [
     {
       title: "Total Expenses",
-      value: "$2,847.50",
-      change: "+12.5%",
+      value: `$${totalExpenses.toFixed(2)}`,
+      change: expenses.length > 0 ? `${expenses.length} transactions` : "No expenses",
       trending: "up",
       icon: DollarSign,
     },
     {
       title: "Monthly Budget",
-      value: "$3,500.00",
-      change: "81% used",
-      trending: "down",
+      value: `$${totalBudget.toFixed(2)}`,
+      change: totalBudget > 0 ? `${((totalExpenses / totalBudget) * 100).toFixed(0)}% used` : "No budget set",
+      trending: totalExpenses > totalBudget ? "up" : "down",
       icon: TrendingDown,
     },
     {
-      title: "Alerts",
-      value: "3",
-      change: "2 new today",
-      trending: "up",
+      title: "Categories",
+      value: Object.keys(expensesByCategory).length.toString(),
+      change: "Tracked",
+      trending: "neutral",
       icon: AlertTriangle,
     },
     {
       title: "AI Insights",
-      value: "5 tips",
-      change: "Ready to view",
+      value: insights.length > 0 ? `${insights.length} tips` : "Generate",
+      change: insights.length > 0 ? "Ready to view" : "Click to generate",
       trending: "neutral",
       icon: Sparkles,
     },
@@ -90,24 +173,33 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card className="gradient-card border-0 shadow-md">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-primary" />
-                AI Quick Tips
+              <CardTitle className="flex items-center gap-2 justify-between">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                  AI Quick Tips
+                </div>
+                <Button onClick={generateInsights} disabled={loading} size="sm">
+                  {loading ? "Generating..." : "Generate Insights"}
+                </Button>
               </CardTitle>
               <CardDescription>
                 Smart suggestions for your finances
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="p-3 bg-background rounded-lg border border-border">
-                <p className="text-sm">💡 You're spending 23% more on dining this month</p>
-              </div>
-              <div className="p-3 bg-background rounded-lg border border-border">
-                <p className="text-sm">🎯 Great job! You're on track with your savings goal</p>
-              </div>
-              <div className="p-3 bg-background rounded-lg border border-border">
-                <p className="text-sm">⚠️ Entertainment budget is 90% used with 10 days left</p>
-              </div>
+              {insights.length > 0 ? (
+                insights.map((insight, idx) => (
+                  <div key={idx} className="p-3 bg-background rounded-lg border border-border">
+                    <p className="text-sm">{insight}</p>
+                  </div>
+                ))
+              ) : (
+                <div className="p-3 bg-background rounded-lg border border-border text-center">
+                  <p className="text-sm text-muted-foreground">
+                    Click "Generate Insights" to get personalized financial tips
+                  </p>
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -122,15 +214,13 @@ export default function Dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ExpenseChart 
-                data={[
-                  { category: "Food", amount: 642 },
-                  { category: "Transport", amount: 245 },
-                  { category: "Entertainment", amount: 180 },
-                  { category: "Shopping", amount: 156 },
-                  { category: "Bills", amount: 1200 },
-                ]}
-              />
+              {chartData.length > 0 ? (
+                <ExpenseChart data={chartData} />
+              ) : (
+                <div className="h-64 flex items-center justify-center text-muted-foreground">
+                  <p>No expenses to display. Add some expenses to see the breakdown.</p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
