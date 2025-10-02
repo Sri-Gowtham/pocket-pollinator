@@ -22,11 +22,6 @@ export type Database = {
           limit_amount: number
           spent: number | null
           user_id: string
-          period_type: string | null
-          start_date: string | null
-          end_date: string | null
-          alert_threshold: number | null
-          is_active: boolean | null
         }
         Insert: {
           category: string
@@ -35,11 +30,6 @@ export type Database = {
           limit_amount: number
           spent?: number | null
           user_id: string
-          period_type?: string | null
-          start_date?: string | null
-          end_date?: string | null
-          alert_threshold?: number | null
-          is_active?: boolean | null
         }
         Update: {
           category?: string
@@ -48,11 +38,6 @@ export type Database = {
           limit_amount?: number
           spent?: number | null
           user_id?: string
-          period_type?: string | null
-          start_date?: string | null
-          end_date?: string | null
-          alert_threshold?: number | null
-          is_active?: boolean | null
         }
         Relationships: []
       }
@@ -65,11 +50,6 @@ export type Database = {
           id: string
           title: string
           user_id: string
-          currency: string | null
-          description: string | null
-          payment_method: string | null
-          is_recurring: boolean | null
-          tags: string[] | null
         }
         Insert: {
           amount: number
@@ -79,11 +59,6 @@ export type Database = {
           id?: string
           title: string
           user_id: string
-          currency?: string | null
-          description?: string | null
-          payment_method?: string | null
-          is_recurring?: boolean | null
-          tags?: string[] | null
         }
         Update: {
           amount?: number
@@ -93,149 +68,35 @@ export type Database = {
           id?: string
           title?: string
           user_id?: string
-          currency?: string | null
-          description?: string | null
-          payment_method?: string | null
-          is_recurring?: boolean | null
-          tags?: string[] | null
         }
         Relationships: []
       }
       profiles: {
         Row: {
           created_at: string | null
+          currency: string | null
           email: string | null
           full_name: string | null
           id: string
-          currency: string | null
-          avatar_url: string | null
           theme_preference: string | null
         }
         Insert: {
           created_at?: string | null
+          currency?: string | null
           email?: string | null
           full_name?: string | null
           id: string
-          currency?: string | null
-          avatar_url?: string | null
           theme_preference?: string | null
         }
         Update: {
           created_at?: string | null
+          currency?: string | null
           email?: string | null
           full_name?: string | null
           id?: string
-          currency?: string | null
-          avatar_url?: string | null
           theme_preference?: string | null
         }
         Relationships: []
-      }
-      financial_goals: {
-        Row: {
-          id: string
-          user_id: string
-          title: string
-          target_amount: number
-          current_amount: number | null
-          target_date: string | null
-          category: string | null
-          description: string | null
-          created_at: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          title: string
-          target_amount: number
-          current_amount?: number | null
-          target_date?: string | null
-          category?: string | null
-          description?: string | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          title?: string
-          target_amount?: number
-          current_amount?: number | null
-          target_date?: string | null
-          category?: string | null
-          description?: string | null
-          created_at?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      ai_insights: {
-        Row: {
-          id: string
-          user_id: string
-          insight_type: string
-          content: string
-          metadata: Json | null
-          created_at: string | null
-          expires_at: string | null
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          insight_type: string
-          content: string
-          metadata?: Json | null
-          created_at?: string | null
-          expires_at?: string | null
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          insight_type?: string
-          content?: string
-          metadata?: Json | null
-          created_at?: string | null
-          expires_at?: string | null
-        }
-        Relationships: []
-      }
-      budget_alerts: {
-        Row: {
-          id: string
-          user_id: string
-          budget_id: string | null
-          alert_type: string
-          message: string
-          is_read: boolean | null
-          created_at: string | null
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          budget_id?: string | null
-          alert_type: string
-          message: string
-          is_read?: boolean | null
-          created_at?: string | null
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          budget_id?: string | null
-          alert_type?: string
-          message?: string
-          is_read?: boolean | null
-          created_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "budget_alerts_budget_id_fkey"
-            columns: ["budget_id"]
-            referencedRelation: "budgets"
-            referencedColumns: ["id"]
-          }
-        ]
       }
     }
     Views: {
