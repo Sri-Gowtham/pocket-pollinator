@@ -16,26 +16,35 @@ export type Database = {
     Tables: {
       budgets: {
         Row: {
+          alert_threshold: number | null
           category: string
           created_at: string | null
           id: string
+          is_active: boolean | null
           limit_amount: number
+          period_type: string | null
           spent: number | null
           user_id: string
         }
         Insert: {
+          alert_threshold?: number | null
           category: string
           created_at?: string | null
           id?: string
+          is_active?: boolean | null
           limit_amount: number
+          period_type?: string | null
           spent?: number | null
           user_id: string
         }
         Update: {
+          alert_threshold?: number | null
           category?: string
           created_at?: string | null
           id?: string
+          is_active?: boolean | null
           limit_amount?: number
+          period_type?: string | null
           spent?: number | null
           user_id?: string
         }
@@ -66,6 +75,42 @@ export type Database = {
           created_at?: string | null
           date?: string
           id?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      financial_goals: {
+        Row: {
+          category: string
+          created_at: string | null
+          current_amount: number | null
+          description: string | null
+          id: string
+          target_amount: number
+          target_date: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          current_amount?: number | null
+          description?: string | null
+          id?: string
+          target_amount: number
+          target_date?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          current_amount?: number | null
+          description?: string | null
+          id?: string
+          target_amount?: number
+          target_date?: string | null
           title?: string
           user_id?: string
         }
