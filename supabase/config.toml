@@ -2,3 +2,9 @@ project_id = "cyvfouoesjnfkshrblbp"
 
 [functions.generate-insights]
 verify_jwt = true
+
+[functions.categorize-expense]
+verify_jwt = true
+
+[functions.analyze-spending]
+verify_jwt = true
