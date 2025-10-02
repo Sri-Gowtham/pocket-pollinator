@@ -122,9 +122,9 @@ All colors MUST be HSL.
   .hexagon {
     clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
   }
-  
+
   .honeycomb-pattern {
-    background-image: 
+    background-image:
       linear-gradient(30deg, hsl(43 96% 56% / 0.05) 12%, transparent 12.5%, transparent 87%, hsl(43 96% 56% / 0.05) 87.5%, hsl(43 96% 56% / 0.05)),
       linear-gradient(150deg, hsl(43 96% 56% / 0.05) 12%, transparent 12.5%, transparent 87%, hsl(43 96% 56% / 0.05) 87.5%, hsl(43 96% 56% / 0.05)),
       linear-gradient(30deg, hsl(43 96% 56% / 0.05) 12%, transparent 12.5%, transparent 87%, hsl(43 96% 56% / 0.05) 87.5%, hsl(43 96% 56% / 0.05)),
@@ -134,16 +134,85 @@ All colors MUST be HSL.
     background-size: 80px 140px;
     background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
   }
-  
+
   .hover-scale {
-    @apply transition-transform duration-300 hover:scale-105;
+    @apply transition-all duration-300 ease-in-out hover:scale-[1.02] hover:-translate-y-1;
   }
-  
+
   .gradient-honey {
     background: var(--gradient-honey);
+    box-shadow: var(--shadow-honey);
   }
-  
+
   .gradient-card {
     background: var(--gradient-card);
+  }
+
+  /* Smooth animations */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.3);
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.5);
+  }
+
+  /* Focus styles */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Loading skeleton */
+  .skeleton {
+    @apply animate-pulse bg-muted rounded;
   }
 }

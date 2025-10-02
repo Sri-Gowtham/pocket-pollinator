@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import Expenses from "./pages/Expenses";
 import Insights from "./pages/Insights";
 import Budget from "./pages/Budget";
+import Profile from "./pages/Profile";
 import Contact from "./pages/Contact";
 import Support from "./pages/Support";
 import Feedback from "./pages/Feedback";
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/expenses" element={<Expenses />} />
           <Route path="/insights" element={<Insights />} />
           <Route path="/budget" element={<Budget />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/support" element={<Support />} />
           <Route path="/feedback" element={<Feedback />} />
