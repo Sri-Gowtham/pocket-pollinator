@@ -20,7 +20,6 @@ interface Expense {
   date: string;
   description?: string;
   payment_method?: string;
-  currency?: string;
   user_id: string;
 }
 
@@ -32,7 +31,6 @@ export default function Expenses() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("all");
-  const [userCurrency, setUserCurrency] = useState("USD");
 
   const [newExpense, setNewExpense] = useState({
     title: "",
@@ -47,29 +45,8 @@ export default function Expenses() {
   const paymentMethods = ["cash", "credit_card", "debit_card", "digital_wallet", "bank_transfer"];
 
   useEffect(() => {
-    loadUserCurrency();
     loadExpenses();
   }, []);
-
-  const loadUserCurrency = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('currency')
-        .eq('id', user.id)
-        .single();
-
-      if (error) throw error;
-      if (data) {
-        setUserCurrency(data.currency || 'USD');
-      }
-    } catch (error: any) {
-      console.error("Error loading currency:", error);
-    }
-  };
 
   const loadExpenses = async () => {
     try {
@@ -117,7 +94,6 @@ export default function Expenses() {
         description: newExpense.description,
         payment_method: newExpense.payment_method,
         date: newExpense.date,
-        currency: userCurrency,
       });
 
       if (error) throw error;
