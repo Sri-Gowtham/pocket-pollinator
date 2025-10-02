@@ -1,7 +1,7 @@
 import { Layout } from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { HelpCircle, Book, Video, MessageCircle } from "lucide-react";
+import { HelpCircle, Book } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -40,25 +40,11 @@ export default function Support() {
         </div>
 
         {/* Quick Links */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card className="hover-scale gradient-card border-0 shadow-md cursor-pointer">
             <CardContent className="pt-6 text-center">
               <Book className="h-8 w-8 text-primary mx-auto mb-3" />
               <h3 className="font-semibold">Documentation</h3>
-            </CardContent>
-          </Card>
-
-          <Card className="hover-scale gradient-card border-0 shadow-md cursor-pointer">
-            <CardContent className="pt-6 text-center">
-              <Video className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold">Video Tutorials</h3>
-            </CardContent>
-          </Card>
-
-          <Card className="hover-scale gradient-card border-0 shadow-md cursor-pointer">
-            <CardContent className="pt-6 text-center">
-              <MessageCircle className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold">Live Chat</h3>
             </CardContent>
           </Card>
 
