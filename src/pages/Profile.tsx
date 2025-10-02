@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 interface Profile {
   id: string;
@@ -33,6 +34,7 @@ interface FinancialGoal {
 export default function Profile() {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { setCurrency } = useCurrency();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [goals, setGoals] = useState<FinancialGoal[]>([]);
@@ -132,6 +134,9 @@ export default function Profile() {
         .eq('id', user.id);
 
       if (error) throw error;
+
+      // Update currency context
+      setCurrency(profileForm.currency);
 
       toast({
         title: "Profile updated!",

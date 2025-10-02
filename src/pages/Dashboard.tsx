@@ -8,10 +8,12 @@ import { SpendingTrendChart } from "@/components/SpendingTrendChart";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { currencySymbol } = useCurrency();
   const [loading, setLoading] = useState(true);
   const [insights, setInsights] = useState<string[]>([]);
   const [expenses, setExpenses] = useState<any[]>([]);
@@ -94,7 +96,7 @@ export default function Dashboard() {
   const stats = [
     {
       title: "Total Expenses",
-      value: `$${totalExpenses.toFixed(2)}`,
+      value: `${currencySymbol}${totalExpenses.toFixed(2)}`,
       change: expenses.length > 0 ? `${expenses.length} transaction${expenses.length !== 1 ? 's' : ''}` : "No expenses yet",
       trending: "up",
       icon: DollarSign,
@@ -103,7 +105,7 @@ export default function Dashboard() {
     },
     {
       title: "Monthly Budget",
-      value: `$${totalBudget.toFixed(2)}`,
+      value: `${currencySymbol}${totalBudget.toFixed(2)}`,
       change: totalBudget > 0 ? `${budgetPercentage.toFixed(0)}% used` : "No budget set",
       trending: totalExpenses > totalBudget ? "up" : "down",
       icon: TrendingDown,
@@ -112,7 +114,7 @@ export default function Dashboard() {
     },
     {
       title: "Remaining Budget",
-      value: remaining >= 0 ? `$${remaining.toFixed(2)}` : `-$${Math.abs(remaining).toFixed(2)}`,
+      value: remaining >= 0 ? `${currencySymbol}${remaining.toFixed(2)}` : `-${currencySymbol}${Math.abs(remaining).toFixed(2)}`,
       change: remaining >= 0 ? "Available" : "Over budget",
       trending: remaining >= 0 ? "down" : "up",
       icon: AlertTriangle,

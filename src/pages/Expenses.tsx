@@ -11,6 +11,7 @@ import { Plus, Trash2, Edit, Download, Search, Filter, Calendar } from "lucide-r
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 interface Expense {
   id: string;
@@ -25,6 +26,7 @@ interface Expense {
 
 export default function Expenses() {
   const { toast } = useToast();
+  const { currencySymbol } = useCurrency();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
@@ -100,7 +102,7 @@ export default function Expenses() {
 
       toast({
         title: "Expense added!",
-        description: `${newExpense.title} - $${newExpense.amount}`,
+        description: `${newExpense.title} - ${currencySymbol}${newExpense.amount}`,
       });
 
       setNewExpense({
@@ -388,7 +390,7 @@ export default function Expenses() {
               </div>
               <div className="text-right">
                 <p className="text-sm text-muted-foreground">Total</p>
-                <p className="text-3xl font-bold">${totalExpenses.toFixed(2)}</p>
+                <p className="text-3xl font-bold">{currencySymbol}{totalExpenses.toFixed(2)}</p>
               </div>
             </div>
           </CardHeader>
@@ -425,7 +427,7 @@ export default function Expenses() {
                       )}
                     </div>
                     <div className="flex items-center gap-3 ml-4">
-                      <span className="text-2xl font-bold">${expense.amount.toFixed(2)}</span>
+                      <span className="text-2xl font-bold">{currencySymbol}{expense.amount.toFixed(2)}</span>
                       <div className="flex gap-1">
                         <Button
                           variant="ghost"
