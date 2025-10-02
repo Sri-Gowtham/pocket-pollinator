@@ -1,8 +1,90 @@
-# Welcome to your Lovable project
+# 🍯 Budget Bee - Smart Expense Tracker
+
+Budget Bee is a comprehensive expense tracking and budget management application powered by AI. Track your spending, set budgets, get intelligent insights, and achieve your financial goals with ease.
 
 ## Project info
 
 **URL**: https://lovable.dev/projects/5dd211e9-1e26-487b-ba7a-49bb6bfc1e8e
+
+## ✨ Features
+
+### Core Functionalities
+
+#### 📊 Expense Tracking
+- ✅ Add, edit, and delete expenses with full CRUD operations
+- ✅ Categorize expenses (Food, Transport, Entertainment, Shopping, Bills, Health, Education, Other)
+- ✅ Add descriptions, payment methods, and dates to expenses
+- ✅ Search and filter expenses by category
+- ✅ Export expenses to CSV format
+- ✅ Real-time expense tracking with Supabase backend
+
+#### 💰 Budget Management
+- ✅ Create budgets with custom time periods (Weekly, Monthly, Quarterly, Yearly, Custom)
+- ✅ Set alert thresholds for budget warnings
+- ✅ Visual progress bars showing budget usage
+- ✅ Edit and delete budgets
+- ✅ Automatic calculation of spent amounts from expenses
+- ✅ Budget alerts when approaching or exceeding limits
+
+#### 🤖 AI-Powered Insights
+- ✅ **Automatic Expense Categorization**: AI suggests categories based on expense descriptions
+- ✅ **Fraud Detection**: Identifies unusual transactions that deviate from spending patterns
+- ✅ **Spending Pattern Analysis**: Detects trends and patterns in your expenses
+- ✅ **Financial Recommendations**: Personalized tips to improve financial health
+- ✅ **Tax Insights**: Identifies potential deductions and tax-saving opportunities
+- ✅ **Savings Opportunities**: Suggests areas where you can reduce costs
+- ✅ **Budget Analysis**: Evaluates how well you're adhering to your budgets
+
+#### 👤 User Profile & Personalization
+- ✅ Profile management (name, email)
+- ✅ Multi-currency support (USD, EUR, GBP, INR, JPY, AUD, CAD)
+- ✅ Financial goals tracking with progress visualization
+- ✅ Create and manage savings goals, investment targets, debt payoff plans
+- ✅ Secure authentication with Supabase Auth
+
+#### 📈 Dashboard & Visualizations
+- ✅ Summary cards showing total expenses, budgets, and remaining amounts
+- ✅ Interactive pie charts for category breakdown
+- ✅ Line charts for spending trends
+- ✅ Real-time statistics and metrics
+- ✅ Color-coded alerts and warnings
+- ✅ Responsive design for all screen sizes
+
+#### 🎨 UI/UX Enhancements
+- ✅ Beautiful bee-themed design with honey gradients
+- ✅ Smooth animations and transitions
+- ✅ Hover effects and interactive elements
+- ✅ Custom scrollbar styling
+- ✅ Loading states and skeletons
+- ✅ Toast notifications for user feedback
+- ✅ Honeycomb pattern backgrounds
+- ✅ Mobile-responsive layout
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **React 18** with TypeScript
+- **Vite** for fast development and building
+- **Tailwind CSS** for styling
+- **Shadcn/ui** for UI components
+- **Recharts** for data visualization
+- **React Router** for navigation
+- **React Query** for data fetching
+- **date-fns** for date formatting
+
+### Backend
+- **Supabase** (PostgreSQL database)
+- **Supabase Auth** for authentication
+- **Supabase Edge Functions** (Deno) for serverless functions
+- **Row Level Security (RLS)** for data protection
+
+### AI Integration
+- **Google Gemini 2.5 Flash** via Lovable AI Gateway
+- Custom AI functions for:
+  - Expense categorization
+  - Spending analysis
+  - Fraud detection
+  - Financial insights generation
 
 ## How can I edit this code?
 

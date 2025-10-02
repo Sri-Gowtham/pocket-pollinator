@@ -88,27 +88,36 @@ export default function Dashboard() {
     amount: amount as number,
   }));
 
+  const remaining = totalBudget - totalExpenses;
+  const budgetPercentage = totalBudget > 0 ? (totalExpenses / totalBudget) * 100 : 0;
+
   const stats = [
     {
       title: "Total Expenses",
       value: `$${totalExpenses.toFixed(2)}`,
-      change: expenses.length > 0 ? `${expenses.length} transactions` : "No expenses",
+      change: expenses.length > 0 ? `${expenses.length} transaction${expenses.length !== 1 ? 's' : ''}` : "No expenses yet",
       trending: "up",
       icon: DollarSign,
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
     },
     {
       title: "Monthly Budget",
       value: `$${totalBudget.toFixed(2)}`,
-      change: totalBudget > 0 ? `${((totalExpenses / totalBudget) * 100).toFixed(0)}% used` : "No budget set",
+      change: totalBudget > 0 ? `${budgetPercentage.toFixed(0)}% used` : "No budget set",
       trending: totalExpenses > totalBudget ? "up" : "down",
       icon: TrendingDown,
+      color: totalExpenses > totalBudget ? "text-red-600" : "text-green-600",
+      bgColor: totalExpenses > totalBudget ? "bg-red-50" : "bg-green-50",
     },
     {
-      title: "Categories",
-      value: Object.keys(expensesByCategory).length.toString(),
-      change: "Tracked",
-      trending: "neutral",
+      title: "Remaining Budget",
+      value: remaining >= 0 ? `$${remaining.toFixed(2)}` : `-$${Math.abs(remaining).toFixed(2)}`,
+      change: remaining >= 0 ? "Available" : "Over budget",
+      trending: remaining >= 0 ? "down" : "up",
       icon: AlertTriangle,
+      color: remaining >= 0 ? "text-green-600" : "text-red-600",
+      bgColor: remaining >= 0 ? "bg-green-50" : "bg-red-50",
     },
     {
       title: "AI Insights",
@@ -116,6 +125,8 @@ export default function Dashboard() {
       change: insights.length > 0 ? "Ready to view" : "Click to generate",
       trending: "neutral",
       icon: Sparkles,
+      color: "text-purple-600",
+      bgColor: "bg-purple-50",
     },
   ];
 
@@ -139,27 +150,25 @@ export default function Dashboard() {
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
-              <Card key={index} className="hover-scale gradient-card border-0 shadow-md">
+              <Card key={index} className="hover-scale gradient-card border-0 shadow-lg transition-all duration-300 hover:shadow-xl">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
                     {stat.title}
                   </CardTitle>
-                  <Icon className="h-5 w-5 text-primary" />
+                  <div className={`p-2 rounded-lg ${stat.bgColor}`}>
+                    <Icon className={`h-5 w-5 ${stat.color}`} />
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold mb-1">{stat.value}</div>
                   <div className="flex items-center gap-1 text-sm">
                     {stat.trending === "up" && (
-                      <TrendingUp className="h-4 w-4 text-green-600" />
+                      <TrendingUp className={`h-4 w-4 ${stat.color}`} />
                     )}
                     {stat.trending === "down" && (
-                      <TrendingDown className="h-4 w-4 text-red-600" />
+                      <TrendingDown className={`h-4 w-4 ${stat.color}`} />
                     )}
-                    <span className={
-                      stat.trending === "up" ? "text-green-600" : 
-                      stat.trending === "down" ? "text-red-600" : 
-                      "text-muted-foreground"
-                    }>
+                    <span className={stat.color}>
                       {stat.change}
                     </span>
                   </div>
